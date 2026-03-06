@@ -101,8 +101,7 @@
       user-select: none;
     }
     .product-btn:active { transform: scale(.95); }
-    .product-btn.in-cart { border-color: var(--primary); background: #FDF5EB; cursor: default; }
-    .product-btn.in-cart:active { transform: none; }
+    .product-btn.in-cart { border-color: var(--primary); background: #FDF5EB; }
     .product-name { font-size: 13px; font-weight: 700; line-height: 1.3; margin-bottom: 3px; flex: 1; }
     .product-sub  { font-size: 11px; color: var(--muted); margin-bottom: 5px; }
     .product-price { font-size: 17px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
@@ -464,7 +463,6 @@
 <div id="checkout-screen">
   <div class="receipt-card">
     <div class="receipt-top">
-      <img src="claude/3e02375a39d65f753fd8f437bef5580e.avif" alt="比呂野" style="height:52px;border-radius:8px;object-fit:cover;margin-bottom:10px;">
       <div class="receipt-store">比呂野</div>
       <div class="receipt-date" id="receipt-date"></div>
     </div>
@@ -542,14 +540,14 @@ function renderProducts() {
     const q = cart[p.id] || 0;
     if (q > 0) {
       return `
-        <div class="product-btn in-cart">
+        <div class="product-btn in-cart" onclick="addToCart(${p.id})">
           <div class="product-name">${p.name}</div>
           ${p.sub ? `<div class="product-sub">${p.sub}</div>` : ''}
           <div class="product-price">¥${p.price.toLocaleString()}</div>
           <div class="prod-qty-row">
-            <button class="prod-qty-btn" onclick="changeQty(${p.id},-1)">−</button>
+            <button class="prod-qty-btn" onclick="event.stopPropagation();changeQty(${p.id},-1)">−</button>
             <span class="prod-qty-num">${q}</span>
-            <button class="prod-qty-btn" onclick="addToCart(${p.id})">＋</button>
+            <button class="prod-qty-btn" onclick="event.stopPropagation();addToCart(${p.id})">＋</button>
           </div>
         </div>`;
     }
@@ -567,7 +565,6 @@ function addToCart(id) {
   renderProducts();
   renderCart();
   updateBottomBar();
-  toast(`${PRODUCTS.find(p=>p.id===id).name} を追加`);
 }
 
 /* ── Cart ── */
