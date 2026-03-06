@@ -699,6 +699,7 @@ function goToCheckout() {
   document.getElementById('main-screen').style.display    = 'none';
   document.getElementById('checkout-screen').style.display = 'block';
   document.getElementById('bottom-bar').style.display     = 'none';
+  document.querySelector('.tabs').style.display           = 'none';
 }
 
 function calcChange() {
@@ -724,6 +725,7 @@ function goBack() {
   document.getElementById('main-screen').style.display    = 'block';
   document.getElementById('checkout-screen').style.display = 'none';
   document.getElementById('bottom-bar').style.display     = 'flex';
+  document.querySelector('.tabs').style.display           = 'flex';
 }
 
 function completeTransaction() {

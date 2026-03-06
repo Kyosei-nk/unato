@@ -1,15 +1,16 @@
 {
   "name": "比呂野 レジ",
   "short_name": "比呂野",
-  "start_url": "./",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#FFF8F0",
   "theme_color": "#6B4C2A",
   "icons": [
     {
-      "src": "claude/3e02375a39d65f753fd8f437bef5580e.avif",
+      "src": "icon.svg",
       "sizes": "any",
-      "type": "image/avif"
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }
