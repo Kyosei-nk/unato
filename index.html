@@ -28,7 +28,6 @@
       margin: 0 auto;
     }
 
-    /* ── Header ── */
     header {
       background: var(--primary);
       color: #fff;
@@ -36,29 +35,22 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-<<<<<<< HEAD
       position: fixed;
       top: 0;
       left: 50%;
       transform: translateX(-50%);
       width: 100%;
       max-width: 500px;
-=======
-      position: sticky;
-      top: 0;
->>>>>>> 31044d39d5f3fd800817f99cdbc55012bee7437d
       z-index: 100;
       box-shadow: 0 2px 8px rgba(0,0,0,.25);
     }
     header h1 { font-size: 20px; letter-spacing: 3px; font-weight: 800; }
     #clock { font-size: 13px; opacity: .85; }
 
-    /* ── Tabs ── */
     .tabs {
       display: flex;
       background: #fff;
       border-bottom: 2px solid var(--border);
-<<<<<<< HEAD
       position: fixed;
       top: 50px;
       left: 50%;
@@ -68,12 +60,6 @@
       z-index: 90;
     }
     #main-screen { padding-top: 91px; }
-=======
-      position: sticky;
-      top: 48px;
-      z-index: 90;
-    }
->>>>>>> 31044d39d5f3fd800817f99cdbc55012bee7437d
     .tab {
       flex: 1;
       padding: 12px;
@@ -90,7 +76,6 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* ── Section label ── */
     .section-label {
       padding: 12px 16px 6px;
       font-size: 11px;
@@ -100,7 +85,6 @@
       text-transform: uppercase;
     }
 
-    /* ── Product grid ── */
     .products-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -126,7 +110,6 @@
     .product-name { font-size: 13px; font-weight: 700; line-height: 1.3; margin-bottom: 3px; flex: 1; }
     .product-sub  { font-size: 11px; color: var(--muted); margin-bottom: 5px; }
     .product-price { font-size: 17px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
-    /* in-card qty controls */
     .prod-qty-row {
       display: flex;
       align-items: center;
@@ -158,7 +141,6 @@
       color: var(--primary);
     }
 
-    /* ── Cart ── */
     #cart-section {
       margin: 0 12px 100px;
       background: var(--card);
@@ -217,7 +199,6 @@
     .del-btn:active { color: var(--danger); }
     .empty-msg { padding: 24px; text-align: center; color: var(--muted); font-size: 14px; }
 
-    /* ── Bottom bar ── */
     #bottom-bar {
       position: fixed;
       bottom: 0;
@@ -260,7 +241,6 @@
     .checkout-btn:active { background: var(--primary-light); }
     .checkout-btn:disabled { background: #CCC; cursor: not-allowed; }
 
-    /* ── Checkout screen ── */
     #checkout-screen { display: none; padding-bottom: 20px; }
 
     .receipt-card {
@@ -274,10 +254,9 @@
       background: var(--primary);
       color: #fff;
       text-align: center;
-      padding: 18px;
+      padding: 14px 18px;
     }
-    .receipt-store { font-size: 22px; font-weight: 800; letter-spacing: 4px; }
-    .receipt-date { font-size: 12px; opacity: .8; margin-top: 4px; }
+    .receipt-date { font-size: 13px; opacity: .9; }
     .receipt-items { padding: 8px 16px; }
     .r-item {
       display: flex;
@@ -297,13 +276,8 @@
       padding: 12px 16px;
     }
     .r-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; color: var(--muted); }
-<<<<<<< HEAD
     .r-row.grand { font-size: 30px; font-weight: 900; color: var(--primary); margin-top: 8px; margin-bottom: 0; }
-=======
-    .r-row.grand { font-size: 21px; font-weight: 900; color: var(--primary); margin-top: 6px; margin-bottom: 0; }
->>>>>>> 31044d39d5f3fd800817f99cdbc55012bee7437d
 
-    /* ── Payment section ── */
     .payment-card {
       margin: 0 12px 12px;
       background: var(--card);
@@ -314,44 +288,26 @@
     .pay-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
     .cash-row {
       display: flex;
-<<<<<<< HEAD
       flex-direction: column;
       gap: 6px;
       margin-bottom: 12px;
     }
     .cash-label { font-size: 12px; font-weight: 600; color: var(--muted); }
     .cash-input-wrap { display: flex; align-items: center; gap: 8px; }
-=======
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-    .cash-label { font-size: 14px; font-weight: 600; white-space: nowrap; }
->>>>>>> 31044d39d5f3fd800817f99cdbc55012bee7437d
     .cash-input {
       flex: 1;
       border: 2px solid var(--border);
       border-radius: 9px;
       padding: 11px 12px;
-<<<<<<< HEAD
       font-size: 28px;
-=======
-      font-size: 22px;
->>>>>>> 31044d39d5f3fd800817f99cdbc55012bee7437d
       font-weight: 700;
       text-align: right;
       color: var(--text);
       background: #fff;
-<<<<<<< HEAD
       min-width: 0;
     }
     .cash-input:focus { outline: none; border-color: var(--primary); }
     .yen { font-size: 16px; font-weight: 700; color: var(--muted); white-space: nowrap; }
-=======
-    }
-    .cash-input:focus { outline: none; border-color: var(--primary); }
-    .yen { font-size: 16px; font-weight: 700; color: var(--muted); }
->>>>>>> 31044d39d5f3fd800817f99cdbc55012bee7437d
     .change-box {
       background: #EAF5EF;
       border: 2px solid var(--accent);
@@ -364,11 +320,7 @@
     .change-box.short { background: #FDECEA; border-color: var(--danger); }
     .change-box .c-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
     .change-box .c-amount { font-size: 38px; font-weight: 900; color: var(--accent); }
-<<<<<<< HEAD
     .change-box.short .c-amount { color: var(--danger); font-size: 18px; font-weight: 600; }
-=======
-    .change-box.short .c-amount { color: var(--danger); }
->>>>>>> 31044d39d5f3fd800817f99cdbc55012bee7437d
     .pay-btns { display: flex; gap: 10px; }
     .back-btn {
       flex: 1;
@@ -395,7 +347,6 @@
     }
     .complete-btn:disabled { background: #CCC; cursor: not-allowed; }
 
-    /* ── History tab ── */
     .summary-card {
       margin: 12px;
       background: var(--primary);
@@ -432,7 +383,6 @@
     .h-total { font-size: 14px; font-weight: 700; color: var(--primary); }
     .h-detail { font-size: 12px; color: #AAA; margin-top: 3px; }
 
-    /* ── Toast ── */
     #toast {
       position: fixed;
       bottom: 90px;
@@ -451,7 +401,6 @@
     }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ── Animations ── */
     @keyframes pop { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
     .pop { animation: pop .2s ease; }
   </style>
@@ -466,14 +415,12 @@
   <span id="clock"></span>
 </header>
 
-<!-- ===== MAIN SCREEN ===== -->
 <div id="main-screen">
   <div class="tabs">
     <div class="tab active" onclick="switchTab('register')">レジ</div>
     <div class="tab"       onclick="switchTab('history')">売上履歴</div>
   </div>
 
-  <!-- Register tab -->
   <div id="tab-register" class="tab-content active">
     <div class="section-label">商品</div>
     <div class="products-grid" id="products-grid"></div>
@@ -489,7 +436,6 @@
     </div>
   </div>
 
-  <!-- History tab -->
   <div id="tab-history" class="tab-content">
     <div class="summary-card">
       <div class="s-label">本日の売上</div>
@@ -508,14 +454,9 @@
   </div>
 </div>
 
-<!-- ===== CHECKOUT SCREEN ===== -->
 <div id="checkout-screen">
   <div class="receipt-card">
     <div class="receipt-top">
-<<<<<<< HEAD
-=======
-      <div class="receipt-store">比呂野</div>
->>>>>>> 31044d39d5f3fd800817f99cdbc55012bee7437d
       <div class="receipt-date" id="receipt-date"></div>
     </div>
     <div class="receipt-items" id="receipt-items"></div>
@@ -529,17 +470,11 @@
   <div class="payment-card">
     <div class="pay-title">お支払い</div>
     <div class="cash-row">
-<<<<<<< HEAD
       <span class="cash-label">お預かり金額</span>
       <div class="cash-input-wrap">
         <input type="number" id="cash-input" class="cash-input" placeholder="0" inputmode="numeric" oninput="calcChange()">
         <span class="yen">円</span>
       </div>
-=======
-      <span class="cash-label">お預かり</span>
-      <input type="number" id="cash-input" class="cash-input" placeholder="0" inputmode="numeric" oninput="calcChange()">
-      <span class="yen">円</span>
->>>>>>> 31044d39d5f3fd800817f99cdbc55012bee7437d
     </div>
     <div class="change-box" id="change-box">
       <div class="c-label">お釣り</div>
@@ -552,7 +487,6 @@
   </div>
 </div>
 
-<!-- Bottom bar -->
 <div id="bottom-bar">
   <div class="total-wrap">
     <div class="total-label">合計（税込）</div>
@@ -566,20 +500,19 @@
 
 <script>
 const PRODUCTS = [
-  { id:1, name:'UNATO',          sub:'65g',  price:1650 },
-  { id:2, name:'UNATO（大）',    sub:'350g', price:7970 },
-  { id:3, name:'UNATO（特大）',  sub:'650g', price:13160 },
-  { id:4, name:'UNATOふりかけ',  sub:'',     price:1650 },
-  { id:5, name:'UNATOだしふりかけ', sub:'',  price:660  },
-  { id:6, name:'鹿肉ジャーキー', sub:'',     price:1500 },
-  { id:7, name:'おやつ缶',       sub:'',     price:1000 },
+  { id:1, name:'UNATO',             sub:'65g',  price:1650 },
+  { id:2, name:'UNATO（大）',       sub:'350g', price:7970 },
+  { id:3, name:'UNATO（特大）',     sub:'650g', price:13160 },
+  { id:4, name:'UNATOふりかけ',     sub:'',     price:1650 },
+  { id:5, name:'UNATOだしふりかけ', sub:'',     price:660  },
+  { id:6, name:'鹿肉ジャーキー',    sub:'',     price:1500 },
+  { id:7, name:'おやつ缶',          sub:'',     price:1000 },
 ];
 
 let cart = {};
 let history = JSON.parse(localStorage.getItem('hirono_hist') || '[]');
 let cartOpen = true;
 
-/* ── Init ── */
 renderProducts();
 renderCart();
 updateBottomBar();
@@ -594,7 +527,6 @@ function updateClock() {
     `${n.getMonth()+1}/${n.getDate()} ${pad(n.getHours())}:${pad(n.getMinutes())}`;
 }
 
-/* ── Products ── */
 function renderProducts() {
   document.getElementById('products-grid').innerHTML = PRODUCTS.map(p => {
     const q = cart[p.id] || 0;
@@ -627,7 +559,6 @@ function addToCart(id) {
   updateBottomBar();
 }
 
-/* ── Cart ── */
 function renderCart() {
   const items = Object.entries(cart).filter(([,q]) => q > 0);
   document.getElementById('cart-count').textContent = items.reduce((s,[,q])=>s+q,0);
@@ -686,7 +617,6 @@ function updateBottomBar() {
   document.getElementById('checkout-btn').disabled = t === 0;
 }
 
-/* ── Tab switching ── */
 function switchTab(name) {
   document.querySelectorAll('.tab').forEach((t,i) => {
     t.classList.toggle('active', (i===0 && name==='register') || (i===1 && name==='history'));
@@ -697,14 +627,13 @@ function switchTab(name) {
   if (name === 'history') renderHistory();
 }
 
-/* ── Checkout ── */
 function goToCheckout() {
   const total = totalAmount();
   if (!total) return;
 
-  const tax   = Math.round(total - total / 1.1);
-  const now   = new Date();
-  const pad   = v => String(v).padStart(2,'0');
+  const tax = Math.round(total - total / 1.1);
+  const now = new Date();
+  const pad = v => String(v).padStart(2,'0');
   document.getElementById('receipt-date').textContent =
     `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${pad(now.getHours())}:${pad(now.getMinutes())}`;
 
@@ -786,7 +715,6 @@ function completeTransaction() {
   }, 400);
 }
 
-/* ── History ── */
 function renderHistory() {
   const today = new Date().toDateString();
   const todayTxs = history.filter(t => new Date(t.time).toDateString() === today);
@@ -821,7 +749,6 @@ function clearHistory() {
   }
 }
 
-/* ── Toast ── */
 let _tt;
 function toast(msg) {
   const el = document.getElementById('toast');
