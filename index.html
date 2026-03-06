@@ -23,12 +23,11 @@
       --danger: #C0392B;
     }
 
+    html, body { height: 100%; overflow: hidden; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Gothic UI', sans-serif;
       background: var(--bg);
       color: var(--text);
-      min-height: 100vh;
-      min-height: 100dvh;
       max-width: 500px;
       margin: 0 auto;
     }
@@ -42,10 +41,10 @@
       align-items: center;
       position: fixed;
       top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
+      left: 0;
+      right: 0;
       max-width: 500px;
+      margin: 0 auto;
       z-index: 100;
       box-shadow: 0 2px 8px rgba(0,0,0,.25);
     }
@@ -58,14 +57,36 @@
       border-bottom: 2px solid var(--border);
       position: fixed;
       top: 62px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
+      left: 0;
+      right: 0;
       max-width: 500px;
+      margin: 0 auto;
       z-index: 90;
     }
-    #main-screen { padding-top: 110px; padding-bottom: 80px; }
-    #checkout-screen { display: none; padding-top: 72px; padding-bottom: 20px; }
+    #main-screen {
+      position: fixed;
+      top: 112px;
+      bottom: 62px;
+      left: 0;
+      right: 0;
+      max-width: 500px;
+      margin: 0 auto;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    #checkout-screen {
+      display: none;
+      position: fixed;
+      top: 62px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-width: 500px;
+      margin: 0 auto;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 20px;
+    }
     .tab {
       flex: 1;
       padding: 14px 12px;
@@ -208,10 +229,10 @@
     #bottom-bar {
       position: fixed;
       bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
+      left: 0;
+      right: 0;
       max-width: 500px;
+      margin: 0 auto;
       background: #fff;
       border-top: 2px solid var(--border);
       padding: 10px 14px;
@@ -422,12 +443,12 @@
   <span id="clock"></span>
 </header>
 
-<div id="main-screen">
-  <div class="tabs">
-    <div class="tab active" onclick="switchTab('register')">レジ</div>
-    <div class="tab"       onclick="switchTab('history')">売上履歴</div>
-  </div>
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('register')">レジ</div>
+  <div class="tab"       onclick="switchTab('history')">売上履歴</div>
+</div>
 
+<div id="main-screen">
   <div id="tab-register" class="tab-content active">
     <div class="section-label">商品</div>
     <div class="products-grid" id="products-grid"></div>
