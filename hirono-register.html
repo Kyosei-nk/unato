@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>比呂野 レジ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --primary: #6B4C2A;
+      --primary-light: #8B6040;
+      --accent: #4A7C59;
+      --bg: #FFF8F0;
+      --card: #FFFFFF;
+      --text: #333;
+      --muted: #777;
+      --border: #E0D5C8;
+      --danger: #C0392B;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Gothic UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 13px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,.25);
+    }
+    header h1 { font-size: 20px; letter-spacing: 3px; font-weight: 800; }
+    #clock { font-size: 13px; opacity: .85; }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      background: #fff;
+      border-bottom: 2px solid var(--border);
+      position: sticky;
+      top: 48px;
+      z-index: 90;
+    }
+    .tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: color .2s;
+    }
+    .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── Section label ── */
+    .section-label {
+      padding: 12px 16px 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* ── Product grid ── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 0 12px 12px;
+    }
+    .product-btn {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 12px 10px;
+      cursor: pointer;
+      position: relative;
+      text-align: left;
+      min-height: 88px;
+      transition: border-color .15s, background .15s, transform .1s;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+    .product-btn:active { transform: scale(.95); }
+    .product-btn.in-cart { border-color: var(--primary); background: #FDF5EB; cursor: default; }
+    .product-btn.in-cart:active { transform: none; }
+    .product-name { font-size: 13px; font-weight: 700; line-height: 1.3; margin-bottom: 3px; flex: 1; }
+    .product-sub  { font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+    .product-price { font-size: 17px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+    /* in-card qty controls */
+    .prod-qty-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: auto;
+    }
+    .prod-qty-btn {
+      width: 32px; height: 32px;
+      border: 1.5px solid var(--primary);
+      background: #fff;
+      color: var(--primary);
+      border-radius: 50%;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background .15s, color .15s;
+    }
+    .prod-qty-btn:active { background: var(--primary); color: #fff; transform: scale(.9); }
+    .prod-qty-num {
+      flex: 1;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--primary);
+    }
+
+    /* ── Cart ── */
+    #cart-section {
+      margin: 0 12px 100px;
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .cart-header {
+      padding: 12px 16px;
+      background: #F5EDE0;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--primary);
+      display: flex;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .cart-item:last-child { border-bottom: none; }
+    .cart-item-name { flex: 1; font-size: 13px; font-weight: 600; }
+    .cart-item-name small { display: block; color: var(--muted); font-size: 11px; font-weight: 400; }
+    .qty-controls { display: flex; align-items: center; gap: 8px; margin: 0 10px; }
+    .qty-btn {
+      width: 30px; height: 30px;
+      border: 1.5px solid var(--primary);
+      background: #fff;
+      color: var(--primary);
+      border-radius: 50%;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s, color .15s;
+    }
+    .qty-btn:active { background: var(--primary); color: #fff; }
+    .qty-num { font-size: 16px; font-weight: 700; min-width: 22px; text-align: center; }
+    .cart-subtotal { font-size: 14px; font-weight: 700; color: var(--primary); min-width: 72px; text-align: right; }
+    .del-btn {
+      margin-left: 8px;
+      background: none;
+      border: none;
+      color: #CCC;
+      font-size: 20px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px;
+    }
+    .del-btn:active { color: var(--danger); }
+    .empty-msg { padding: 24px; text-align: center; color: var(--muted); font-size: 14px; }
+
+    /* ── Bottom bar ── */
+    #bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 500px;
+      background: #fff;
+      border-top: 2px solid var(--border);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 100;
+    }
+    .total-wrap { flex: 1; }
+    .total-label { font-size: 11px; color: var(--muted); }
+    .total-amount { font-size: 26px; font-weight: 900; color: var(--primary); }
+    .clear-btn {
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .checkout-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 22px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .checkout-btn:active { background: var(--primary-light); }
+    .checkout-btn:disabled { background: #CCC; cursor: not-allowed; }
+
+    /* ── Checkout screen ── */
+    #checkout-screen { display: none; padding-bottom: 20px; }
+
+    .receipt-card {
+      margin: 12px;
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .receipt-top {
+      background: var(--primary);
+      color: #fff;
+      text-align: center;
+      padding: 18px;
+    }
+    .receipt-store { font-size: 22px; font-weight: 800; letter-spacing: 4px; }
+    .receipt-date { font-size: 12px; opacity: .8; margin-top: 4px; }
+    .receipt-items { padding: 8px 16px; }
+    .r-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 9px 0;
+      border-bottom: 1px dashed var(--border);
+      font-size: 14px;
+    }
+    .r-item:last-child { border-bottom: none; }
+    .r-item-info .r-name { font-weight: 700; }
+    .r-item-info .r-detail { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .r-amount { font-weight: 700; color: var(--primary); white-space: nowrap; margin-left: 12px; }
+    .receipt-total-box {
+      background: #F5EDE0;
+      border-top: 2px solid var(--primary);
+      padding: 12px 16px;
+    }
+    .r-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; color: var(--muted); }
+    .r-row.grand { font-size: 21px; font-weight: 900; color: var(--primary); margin-top: 6px; margin-bottom: 0; }
+
+    /* ── Payment section ── */
+    .payment-card {
+      margin: 0 12px 12px;
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 16px;
+    }
+    .pay-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+    .cash-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .cash-label { font-size: 14px; font-weight: 600; white-space: nowrap; }
+    .cash-input {
+      flex: 1;
+      border: 2px solid var(--border);
+      border-radius: 9px;
+      padding: 11px 12px;
+      font-size: 22px;
+      font-weight: 700;
+      text-align: right;
+      color: var(--text);
+      background: #fff;
+    }
+    .cash-input:focus { outline: none; border-color: var(--primary); }
+    .yen { font-size: 16px; font-weight: 700; color: var(--muted); }
+    .change-box {
+      background: #EAF5EF;
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      margin-bottom: 14px;
+      transition: background .2s, border-color .2s;
+    }
+    .change-box.short { background: #FDECEA; border-color: var(--danger); }
+    .change-box .c-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .change-box .c-amount { font-size: 38px; font-weight: 900; color: var(--accent); }
+    .change-box.short .c-amount { color: var(--danger); }
+    .pay-btns { display: flex; gap: 10px; }
+    .back-btn {
+      flex: 1;
+      background: #fff;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .complete-btn {
+      flex: 2;
+      background: var(--accent);
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
+    .complete-btn:disabled { background: #CCC; cursor: not-allowed; }
+
+    /* ── History tab ── */
+    .summary-card {
+      margin: 12px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 14px;
+      padding: 18px;
+    }
+    .summary-card .s-label { font-size: 12px; opacity: .75; margin-bottom: 6px; }
+    .summary-card .s-total { font-size: 32px; font-weight: 900; }
+    .summary-card .s-count { font-size: 13px; opacity: .75; margin-top: 4px; }
+    .history-card {
+      margin: 0 12px 20px;
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .history-card-header {
+      padding: 12px 16px;
+      background: #F5F5F5;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .h-item {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .h-item:last-child { border-bottom: none; }
+    .h-row { display: flex; justify-content: space-between; }
+    .h-time { font-size: 12px; color: var(--muted); }
+    .h-total { font-size: 14px; font-weight: 700; color: var(--primary); }
+    .h-detail { font-size: 12px; color: #AAA; margin-top: 3px; }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(0,0,0,.75);
+      color: #fff;
+      padding: 9px 20px;
+      border-radius: 22px;
+      font-size: 13px;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s, transform .25s;
+      white-space: nowrap;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── Animations ── */
+    @keyframes pop { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
+    .pop { animation: pop .2s ease; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <img src="claude/3e02375a39d65f753fd8f437bef5580e.avif" alt="比呂野" style="height:36px;border-radius:6px;object-fit:cover;">
+    <h1>比呂野</h1>
+  </div>
+  <span id="clock"></span>
+</header>
+
+<!-- ===== MAIN SCREEN ===== -->
+<div id="main-screen">
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('register')">レジ</div>
+    <div class="tab"       onclick="switchTab('history')">売上履歴</div>
+  </div>
+
+  <!-- Register tab -->
+  <div id="tab-register" class="tab-content active">
+    <div class="section-label">商品</div>
+    <div class="products-grid" id="products-grid"></div>
+
+    <div id="cart-section">
+      <div class="cart-header" onclick="toggleCart()">
+        <span>カート <span id="cart-count">0</span>点</span>
+        <span id="cart-icon">▼</span>
+      </div>
+      <div id="cart-body">
+        <div class="empty-msg">商品をタップして追加してください</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- History tab -->
+  <div id="tab-history" class="tab-content">
+    <div class="summary-card">
+      <div class="s-label">本日の売上</div>
+      <div class="s-total" id="daily-total">¥0</div>
+      <div class="s-count" id="daily-count">0件</div>
+    </div>
+    <div class="history-card">
+      <div class="history-card-header">
+        <span>取引履歴</span>
+        <button class="clear-btn" onclick="clearHistory()">クリア</button>
+      </div>
+      <div id="history-list">
+        <div class="empty-msg">履歴はありません</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHECKOUT SCREEN ===== -->
+<div id="checkout-screen">
+  <div class="receipt-card">
+    <div class="receipt-top">
+      <img src="claude/3e02375a39d65f753fd8f437bef5580e.avif" alt="比呂野" style="height:52px;border-radius:8px;object-fit:cover;margin-bottom:10px;">
+      <div class="receipt-store">比呂野</div>
+      <div class="receipt-date" id="receipt-date"></div>
+    </div>
+    <div class="receipt-items" id="receipt-items"></div>
+    <div class="receipt-total-box">
+      <div class="r-row"><span>合計（税込）</span><span id="r-total-tax"></span></div>
+      <div class="r-row"><span>内消費税（10%）</span><span id="r-tax"></span></div>
+      <div class="r-row grand"><span>お会計</span><span id="r-grand"></span></div>
+    </div>
+  </div>
+
+  <div class="payment-card">
+    <div class="pay-title">お支払い</div>
+    <div class="cash-row">
+      <span class="cash-label">お預かり</span>
+      <input type="number" id="cash-input" class="cash-input" placeholder="0" inputmode="numeric" oninput="calcChange()">
+      <span class="yen">円</span>
+    </div>
+    <div class="change-box" id="change-box">
+      <div class="c-label">お釣り</div>
+      <div class="c-amount" id="change-amount">—</div>
+    </div>
+    <div class="pay-btns">
+      <button class="back-btn" onclick="goBack()">戻る</button>
+      <button class="complete-btn" id="complete-btn" onclick="completeTransaction()" disabled>完了</button>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom bar -->
+<div id="bottom-bar">
+  <div class="total-wrap">
+    <div class="total-label">合計（税込）</div>
+    <div class="total-amount" id="total-amount">¥0</div>
+  </div>
+  <button class="clear-btn" onclick="clearCart()">クリア</button>
+  <button class="checkout-btn" id="checkout-btn" onclick="goToCheckout()" disabled>会計</button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const PRODUCTS = [
+  { id:1, name:'UNATO',          sub:'65g',  price:1650 },
+  { id:2, name:'UNATO（大）',    sub:'350g', price:7970 },
+  { id:3, name:'UNATO（特大）',  sub:'650g', price:13160 },
+  { id:4, name:'UNATOふりかけ',  sub:'',     price:1650 },
+  { id:5, name:'UNATOだしふりかけ', sub:'',  price:660  },
+  { id:6, name:'鹿肉ジャーキー', sub:'',     price:1500 },
+  { id:7, name:'おやつ缶',       sub:'',     price:1000 },
+];
+
+let cart = {};
+let history = JSON.parse(localStorage.getItem('hirono_hist') || '[]');
+let cartOpen = true;
+
+/* ── Init ── */
+renderProducts();
+renderCart();
+updateBottomBar();
+renderHistory();
+updateClock();
+setInterval(updateClock, 1000);
+
+function updateClock() {
+  const n = new Date();
+  const pad = v => String(v).padStart(2,'0');
+  document.getElementById('clock').textContent =
+    `${n.getMonth()+1}/${n.getDate()} ${pad(n.getHours())}:${pad(n.getMinutes())}`;
+}
+
+/* ── Products ── */
+function renderProducts() {
+  document.getElementById('products-grid').innerHTML = PRODUCTS.map(p => {
+    const q = cart[p.id] || 0;
+    if (q > 0) {
+      return `
+        <div class="product-btn in-cart">
+          <div class="product-name">${p.name}</div>
+          ${p.sub ? `<div class="product-sub">${p.sub}</div>` : ''}
+          <div class="product-price">¥${p.price.toLocaleString()}</div>
+          <div class="prod-qty-row">
+            <button class="prod-qty-btn" onclick="changeQty(${p.id},-1)">−</button>
+            <span class="prod-qty-num">${q}</span>
+            <button class="prod-qty-btn" onclick="addToCart(${p.id})">＋</button>
+          </div>
+        </div>`;
+    }
+    return `
+      <div class="product-btn" onclick="addToCart(${p.id})">
+        <div class="product-name">${p.name}</div>
+        ${p.sub ? `<div class="product-sub">${p.sub}</div>` : ''}
+        <div class="product-price">¥${p.price.toLocaleString()}</div>
+      </div>`;
+  }).join('');
+}
+
+function addToCart(id) {
+  cart[id] = (cart[id] || 0) + 1;
+  renderProducts();
+  renderCart();
+  updateBottomBar();
+  toast(`${PRODUCTS.find(p=>p.id===id).name} を追加`);
+}
+
+/* ── Cart ── */
+function renderCart() {
+  const items = Object.entries(cart).filter(([,q]) => q > 0);
+  document.getElementById('cart-count').textContent = items.reduce((s,[,q])=>s+q,0);
+  const body = document.getElementById('cart-body');
+  if (!items.length) {
+    body.innerHTML = '<div class="empty-msg">商品をタップして追加してください</div>';
+    return;
+  }
+  body.innerHTML = items.map(([id,q]) => {
+    const p = PRODUCTS.find(x => x.id === +id);
+    return `
+      <div class="cart-item">
+        <div class="cart-item-name">${p.name}${p.sub?`<small>${p.sub}</small>`:''}</div>
+        <div class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(${id},-1)">−</button>
+          <span class="qty-num">${q}</span>
+          <button class="qty-btn" onclick="changeQty(${id},1)">＋</button>
+        </div>
+        <div class="cart-subtotal">¥${(p.price*q).toLocaleString()}</div>
+        <button class="del-btn" onclick="removeItem(${id})">✕</button>
+      </div>`;
+  }).join('');
+}
+
+function changeQty(id, d) {
+  cart[id] = (cart[id]||0) + d;
+  if (cart[id] <= 0) delete cart[id];
+  renderProducts(); renderCart(); updateBottomBar();
+}
+function removeItem(id) { delete cart[id]; renderProducts(); renderCart(); updateBottomBar(); }
+
+function toggleCart() {
+  cartOpen = !cartOpen;
+  document.getElementById('cart-body').style.display = cartOpen ? '' : 'none';
+  document.getElementById('cart-icon').textContent = cartOpen ? '▼' : '▶';
+}
+
+function clearCart() {
+  if (!Object.keys(cart).length) return;
+  if (confirm('カートをクリアしますか？')) {
+    cart = {};
+    renderProducts(); renderCart(); updateBottomBar();
+  }
+}
+
+function totalAmount() {
+  return Object.entries(cart).reduce((s,[id,q]) => {
+    const p = PRODUCTS.find(x=>x.id===+id);
+    return s + (p ? p.price*q : 0);
+  }, 0);
+}
+
+function updateBottomBar() {
+  const t = totalAmount();
+  document.getElementById('total-amount').textContent = `¥${t.toLocaleString()}`;
+  document.getElementById('checkout-btn').disabled = t === 0;
+}
+
+/* ── Tab switching ── */
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    t.classList.toggle('active', (i===0 && name==='register') || (i===1 && name==='history'));
+  });
+  document.getElementById('tab-register').classList.toggle('active', name==='register');
+  document.getElementById('tab-history').classList.toggle('active', name==='history');
+  document.getElementById('bottom-bar').style.display = name==='register' ? 'flex' : 'none';
+  if (name === 'history') renderHistory();
+}
+
+/* ── Checkout ── */
+function goToCheckout() {
+  const total = totalAmount();
+  if (!total) return;
+
+  const tax   = Math.round(total - total / 1.1);
+  const now   = new Date();
+  const pad   = v => String(v).padStart(2,'0');
+  document.getElementById('receipt-date').textContent =
+    `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+  document.getElementById('receipt-items').innerHTML =
+    Object.entries(cart).filter(([,q])=>q>0).map(([id,q]) => {
+      const p = PRODUCTS.find(x=>x.id===+id);
+      return `
+        <div class="r-item">
+          <div class="r-item-info">
+            <div class="r-name">${p.name}</div>
+            <div class="r-detail">${p.sub ? p.sub+' / ' : ''}¥${p.price.toLocaleString()} × ${q}</div>
+          </div>
+          <div class="r-amount">¥${(p.price*q).toLocaleString()}</div>
+        </div>`;
+    }).join('');
+
+  document.getElementById('r-total-tax').textContent = `¥${total.toLocaleString()}`;
+  document.getElementById('r-tax').textContent       = `¥${tax.toLocaleString()}`;
+  document.getElementById('r-grand').textContent     = `¥${total.toLocaleString()}`;
+
+  document.getElementById('cash-input').value = '';
+  document.getElementById('change-amount').textContent = '—';
+  document.getElementById('change-box').className = 'change-box';
+  document.getElementById('complete-btn').disabled = true;
+
+  document.getElementById('main-screen').style.display    = 'none';
+  document.getElementById('checkout-screen').style.display = 'block';
+  document.getElementById('bottom-bar').style.display     = 'none';
+}
+
+function calcChange() {
+  const total = totalAmount();
+  const cash  = parseInt(document.getElementById('cash-input').value) || 0;
+  const diff  = cash - total;
+  const box   = document.getElementById('change-box');
+  const el    = document.getElementById('change-amount');
+  const btn   = document.getElementById('complete-btn');
+
+  if (!cash) {
+    el.textContent = '—'; box.className = 'change-box'; btn.disabled = true;
+  } else if (diff < 0) {
+    el.textContent = `¥${Math.abs(diff).toLocaleString()} 不足`;
+    box.className = 'change-box short'; btn.disabled = true;
+  } else {
+    el.textContent = `¥${diff.toLocaleString()}`;
+    box.className = 'change-box'; btn.disabled = false;
+  }
+}
+
+function goBack() {
+  document.getElementById('main-screen').style.display    = 'block';
+  document.getElementById('checkout-screen').style.display = 'none';
+  document.getElementById('bottom-bar').style.display     = 'flex';
+}
+
+function completeTransaction() {
+  const total = totalAmount();
+  const cash  = parseInt(document.getElementById('cash-input').value) || 0;
+  if (cash < total) return;
+
+  const tx = {
+    id:    Date.now(),
+    time:  new Date().toISOString(),
+    items: Object.entries(cart).map(([id,q]) => {
+      const p = PRODUCTS.find(x=>x.id===+id);
+      return { name: p.name, qty: q, price: p.price };
+    }),
+    total, cash, change: cash - total,
+  };
+  history.unshift(tx);
+  localStorage.setItem('hirono_hist', JSON.stringify(history));
+
+  cart = {};
+  toast('会計が完了しました！');
+
+  setTimeout(() => {
+    goBack();
+    renderProducts(); renderCart(); updateBottomBar();
+  }, 400);
+}
+
+/* ── History ── */
+function renderHistory() {
+  const today = new Date().toDateString();
+  const todayTxs = history.filter(t => new Date(t.time).toDateString() === today);
+  document.getElementById('daily-total').textContent = `¥${todayTxs.reduce((s,t)=>s+t.total,0).toLocaleString()}`;
+  document.getElementById('daily-count').textContent = `${todayTxs.length}件`;
+
+  const el = document.getElementById('history-list');
+  if (!history.length) { el.innerHTML = '<div class="empty-msg">履歴はありません</div>'; return; }
+
+  el.innerHTML = history.slice(0,30).map(t => {
+    const d   = new Date(t.time);
+    const pad = v => String(v).padStart(2,'0');
+    const ts  = `${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    const summary = t.items.map(i=>`${i.name}×${i.qty}`).join('、');
+    return `
+      <div class="h-item">
+        <div class="h-row">
+          <span class="h-time">${ts}</span>
+          <span class="h-total">¥${t.total.toLocaleString()}</span>
+        </div>
+        <div class="h-detail">${summary}</div>
+      </div>`;
+  }).join('');
+}
+
+function clearHistory() {
+  if (!history.length) return;
+  if (confirm('売上履歴をすべて削除しますか？')) {
+    history = [];
+    localStorage.removeItem('hirono_hist');
+    renderHistory();
+  }
+}
+
+/* ── Toast ── */
+let _tt;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_tt);
+  _tt = setTimeout(() => el.classList.remove('show'), 2000);
+}
+</script>
+</body>
+</html>
