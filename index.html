@@ -19,13 +19,16 @@
       --danger: #C0392B;
     }
 
+    html, body { height: 100%; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Gothic UI', sans-serif;
       background: var(--bg);
       color: var(--text);
-      min-height: 100vh;
+      min-height: 100%;
       max-width: 500px;
       margin: 0 auto;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     header {
@@ -52,19 +55,20 @@
       background: #fff;
       border-bottom: 2px solid var(--border);
       position: fixed;
-      top: 50px;
+      top: 62px;
       left: 50%;
       transform: translateX(-50%);
       width: 100%;
       max-width: 500px;
       z-index: 90;
     }
-    #main-screen { padding-top: 91px; }
+    #main-screen { padding-top: 110px; }
+    #checkout-screen { display: none; padding-top: 70px; padding-bottom: 20px; }
     .tab {
       flex: 1;
-      padding: 12px;
+      padding: 14px 12px;
       text-align: center;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 600;
       color: var(--muted);
       cursor: pointer;
@@ -241,7 +245,6 @@
     .checkout-btn:active { background: var(--primary-light); }
     .checkout-btn:disabled { background: #CCC; cursor: not-allowed; }
 
-    #checkout-screen { display: none; padding-bottom: 20px; }
 
     .receipt-card {
       margin: 12px;
