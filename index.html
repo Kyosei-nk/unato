@@ -165,7 +165,7 @@
     }
 
     #cart-section {
-      margin: 0 12px 100px;
+      margin: 0 12px 20px;
       background: var(--card);
       border-radius: 14px;
       border: 1px solid var(--border);
@@ -466,6 +466,15 @@
     </div>
     <div class="history-card">
       <div class="history-card-header">
+        <span>商品別売上（本日）</span>
+      </div>
+      <div id="product-sales-list">
+        <div class="empty-msg">データなし</div>
+      </div>
+    </div>
+
+    <div class="history-card">
+      <div class="history-card-header">
         <span>取引履歴</span>
         <button class="clear-btn" onclick="clearHistory()">クリア</button>
       </div>
@@ -742,6 +751,28 @@ function renderHistory() {
   const todayTxs = history.filter(t => new Date(t.time).toDateString() === today);
   document.getElementById('daily-total').textContent = `¥${todayTxs.reduce((s,t)=>s+t.total,0).toLocaleString()}`;
   document.getElementById('daily-count').textContent = `${todayTxs.length}件`;
+
+  // 商品別売上
+  const totals = {};
+  todayTxs.forEach(t => {
+    t.items.forEach(i => {
+      if (!totals[i.name]) totals[i.name] = { qty: 0, amount: 0 };
+      totals[i.name].qty += i.qty;
+      totals[i.name].amount += i.price * i.qty;
+    });
+  });
+  const pEl = document.getElementById('product-sales-list');
+  const entries = Object.entries(totals).sort((a,b) => b[1].amount - a[1].amount);
+  pEl.innerHTML = entries.length
+    ? entries.map(([name, {qty, amount}]) => `
+        <div class="h-item">
+          <div class="h-row">
+            <span style="font-size:13px;font-weight:600;">${name}</span>
+            <span class="h-total">¥${amount.toLocaleString()}</span>
+          </div>
+          <div class="h-detail">${qty}点</div>
+        </div>`).join('')
+    : '<div class="empty-msg">データなし</div>';
 
   const el = document.getElementById('history-list');
   if (!history.length) { el.innerHTML = '<div class="empty-msg">履歴はありません</div>'; return; }
